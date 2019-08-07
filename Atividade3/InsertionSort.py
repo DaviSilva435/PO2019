@@ -27,7 +27,7 @@ def InsertionSort(lista):
         j = j-1
         contador_alteracoes= contador_alteracoes+1
       lista[j+1] = valor
-    return lista
+    return contador_alteracoes
   
 mpl.use('Agg')
   
@@ -41,7 +41,7 @@ def desenhaGrafico(x,y,y2,nome_arquivo,xl = "Entradas", yl = "Saídas"):
     plt.xlabel(xl)
     fig.savefig(nome_arquivo)
 
-x = [1000,2000,5000,10000]
+x = [10000,20000,50000,100000]
 y = []
 yInverso = []
 tempo= []
