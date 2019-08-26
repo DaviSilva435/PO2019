@@ -3,23 +3,11 @@ from random import shuffle
 import timeit
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-  
+
 def geraLista(tam):
-    lista = list(range(1, tam + 1))
-    shuffle(lista)
-    return lista
-    
-def countingSort(lista):
-    maior = max(lista)
-    aux = [0] * (maior + 1)
-    for i in range(len(lista)):
-        aux[lista[i]] += 1
-    x = 0
-    for i in range(len(aux)):
-        repeticao = aux[i]
-        for _ in range(repeticao):
-            lista[x] = i
-            x += 1
+    vetor = list(range(1, tam + 1))
+    shuffle(vetor)
+    return vetor
 
 def desenhaGrafico(x, y, file_name, xl="Entradas", yl="Saídas"):
     fig = plt.figure(figsize=(10, 8))
@@ -30,6 +18,18 @@ def desenhaGrafico(x, y, file_name, xl="Entradas", yl="Saídas"):
     plt.xlabel(xl)
     fig.savefig(file_name)
 
+def Counting(vetor):
+    num_max = max(vetor)
+    aux = [0] * (num_max + 1)
+    for i in range(len(vetor)):
+        aux[vetor[i]] += 1
+    x = 0
+    for i in range(len(aux)):
+        a = aux[i]
+        for _ in range(a):
+            vetor[x] = i
+            x += 1
+
 x = [100000, 200000, 400000, 500000, 1000000, 2000000]
 y = []
 tempo = []
@@ -38,6 +38,6 @@ for i in range(len(x)):
     y.append(geraLista(x[i]))
 
 for i in range(len(x)):
-    tempo.append(timeit.timeit("countingSort({})".format(y[i]), setup="from __main__ import countingSort",number=1))
+    tempo.append(timeit.timeit("Counting({})".format(y[i]), setup="from __main__ import Counting", number=1))
 
 desenhaGrafico(x, tempo, "Grafico.png")
