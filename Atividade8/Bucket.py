@@ -3,63 +3,58 @@ from random import shuffle
 import timeit
 import matplotlib as mpl
 import matplotlib.pyplot as plt
- 
-mpl.use('Agg')  
+
+mpl.use('Agg')
 
 def geraLista(tam):
-    lista = list(range(1, tam + 1))
-    shuffle(lista)
-    return lista
+    vetor = list(range(1, tam + 1))
+    shuffle(vetor)
+    return vetor
 
-def bucketSort(lista):
 
-    def quickSort(lista, st, end):
-        if st < end:
-            aux = randint(st, end)
-            x = lista[end]
-            lista[end] = lista[aux]
-            lista[aux] = x
+def bucketSort(vetor):
+    def quickSort(vetor, st, fim):
+        if st < fim:
+            aux = randint(st, fim)
+            x = vetor[fim]
+            vetor[fim] = vetor[aux]
+            vetor[aux] = x
 
-            p = partition(lista, st, end)
-            quickSort(lista, st, p - 1)
-            quickSort(lista, p + 1, end)
+            p = dividir(vetor, st, fim)
+            quickSort(vetor, st, p - 1)
+            quickSort(vetor, p + 1, fim)
 
-        return lista
+        return vetor
 
-    def partition(lista, st, end):
-        aux = randint(st, end)
+    def dividir(vetor, st, fim):
+        aux = randint(st, fim)
+        vetor[fim], vetor[aux] = vetor[aux], vetor[fim]
+        aux2 = st - 1
+        for index in range(st, fim):
+            if vetor[index] < vetor[fim]:
+                aux2 = aux2 + 1
+                vetor[aux2], vetor[index] = vetor[index], vetor[aux2]
 
-        lista[end], lista[aux] = lista[aux], lista[end]
+        x = vetor[aux2 + 1]
+        vetor[aux2 + 1] = vetor[fim]
+        vetor[fim] = x
 
-        aux_index = st - 1
-        for index in range(st, end):
-            if lista[index] < lista[end]:
-                aux_index = aux_index + 1
-                lista[aux_index], lista[index] = lista[index], lista[aux_index]
+        return aux2 + 1
 
-        x = lista[aux_index + 1]
-        lista[aux_index + 1] = lista[end]
-        lista[end] = x
-
-        return aux_index + 1
-
-    maior = max(lista)
-
-    tam = len(lista)
-
-    size = maior/tam
-
+    maior = max(vetor)
+    tam = len(vetor)
+    size = maior / tam
     bucket = [[] for _ in range(tam)]
 
     for i in range(tam):
-        j = int(lista[i]/size)
+        j = int(vetor[i] / size)
         if j != tam:
-            bucket[j].append(lista[i])
+            bucket[j].appfim(vetor[i])
         else:
-            bucket[tam - 1].append(lista[i])
+            bucket[tam - 1].appfim(vetor[i])
 
     for i in range(tam):
-        quickSort(bucket[i],0,len(bucket[i])-1)
+        quickSort(bucket[i], 0, len(bucket[i]) - 1)
 
     result = []
 
@@ -68,11 +63,12 @@ def bucketSort(lista):
 
     return result
 
+
 def desenhaGrafico(x, y, file_name, xl="Entradas", yl="Saídas"):
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111)
-    ax.plot(x, y, label="Tamanho da lista de números x Tempo")
-    ax.legend(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
+    ax.plot(x, y, label="Tamanho da vetor de números x Tempo")
+    ax.legfim(bbox_to_anchor=(1, 1), bbox_transform=plt.gcf().transFigure)
     plt.ylabel(yl)
     plt.xlabel(xl)
     fig.savefig(file_name)
@@ -82,9 +78,9 @@ y = []
 tempo = []
 
 for i in range(len(x)):
-    y.append(geraLista(x[i]))
+    y.appfim(geraLista(x[i]))
 
 for i in range(len(x)):
-    tempo.append(timeit.timeit("bucketSort({})".format(y[i]), setup="from __main__ import bucketSort",number=1))
+    tempo.appfim(timeit.timeit("bucketSort({})".format(y[i]), setup="from __main__ import bucketSort", number=1))
 
 desenhaGrafico(x, tempo, "Tempo.png")
